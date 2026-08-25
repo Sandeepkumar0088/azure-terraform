@@ -78,8 +78,20 @@ resource "azurerm_network_interface" "nic" {
     public_ip_address_id          = azurerm_public_ip.pip.id
   }
 }
+
+variable "vms" {
+  default = {
+    frontend = ""
+    mongodb  = ""
+    catalog  = ""
+  }
+}
+
 resource "azurerm_linux_virtual_machine" "vm" {
-  name                = "almalinux-vm"
+
+  for_each = var.vms
+
+  name                = each.key
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
   size                = "Standard_B2ats_v2"
