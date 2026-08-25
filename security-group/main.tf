@@ -31,7 +31,8 @@ resource "azurerm_subnet" "subnet" {
 }
 
 resource "azurerm_public_ip" "pip" {
-  name                = "my-pip"
+  for_each = var.vms
+  name                = "my-pip-${each.key}"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
   allocation_method   = "Static"
@@ -67,7 +68,9 @@ resource "azurerm_network_security_group" "nsg" {
   }
 }
 resource "azurerm_network_interface" "nic" {
-  name                = "alma-nic"
+
+  for_each = var.vms
+  name                = "alma-nic-${each.key}"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
 
@@ -75,7 +78,7 @@ resource "azurerm_network_interface" "nic" {
     name                          = "internal"
     subnet_id                     = azurerm_subnet.subnet.id
     private_ip_address_allocation = "Dynamic"
-    public_ip_address_id          = azurerm_public_ip.pip.id
+    public_ip_address_id          = azurerm_public_ip.pip[each.key].id
   }
 }
 
@@ -102,7 +105,7 @@ resource "azurerm_linux_virtual_machine" "vm" {
   disable_password_authentication = false
 
   network_interface_ids = [
-    azurerm_network_interface.nic.id
+    azurerm_network_interface.nic[each.key].id
   ]
 
   os_disk {
