@@ -87,6 +87,9 @@ variable "vms" {
     frontend = ""
     mongodb  = ""
     catalog  = ""
+    user     = ""
+    redis    = ""
+    cart     = ""
   }
 }
 
