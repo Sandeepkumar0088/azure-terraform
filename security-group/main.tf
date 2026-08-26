@@ -147,7 +147,7 @@ resource "null_resource" "ansible" {
       type      = "ssh"
       user      = "sandeep"
       password  = "Sandeep.,@0088"
-      host      = each.value
+      host      = azurerm_linux_virtual_machine.vm[each.key].private_ip_address
     }
 
     inline = [
