@@ -93,7 +93,7 @@ variable "vms" {
   default = {
     frontend    = "10.0.1.8"
     mongodb     = "10.0.1.9"
-    catalogu   = "10.0.1.13"
+    catalog     = "10.0.1.13"
     user        = "10.0.1.7"
     redis       = "10.0.1.4"
     cart        = "10.0.1.11"
@@ -145,8 +145,8 @@ resource "null_resource" "ansible" {
   provisioner "remote-exec" {
     connection {
       type      = "ssh"
-      user      = "ec2-user"
-      password  = "DevOps321"
+      user      = "sandeep"
+      password  = "Sandeep.,@0088"
       host      = each.value
     }
 
