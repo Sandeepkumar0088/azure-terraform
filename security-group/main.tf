@@ -152,7 +152,7 @@ resource "null_resource" "ansible" {
 
     inline = [
       "sudo dnf install ansible-core npm unzip -y",
-      "ansible-pull -i '${each.key}-dev.sandeepkumar5427.online', -U https://github.com/Sandeepkumar0088/roboshop-ansible-templates.git main.yml -e component=${each.key} -e env=dev"
+      "ansible-pull -i localhost, -U https://github.com/Sandeepkumar0088/roboshop-ansible-templates.git main.yml -e component=${each.key} -e env=dev"
     ]
 
   }
