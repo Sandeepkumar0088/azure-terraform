@@ -91,12 +91,16 @@ resource "azurerm_network_interface_security_group_association" "nsg_assoc" {
 
 variable "vms" {
   default = {
-    frontend = ""
-    mongodb  = ""
-    catalog  = ""
-    user     = ""
-    redis    = ""
-    cart     = ""
+    frontend    = ""
+    mongodb     = ""
+    catalog     = ""
+    user        = ""
+    redis       = ""
+    cart        = ""
+    mysql       = ""
+    shipping    = ""
+    rabbitmq    = ""
+    payment     = ""
   }
 }
 
