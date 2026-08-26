@@ -91,16 +91,16 @@ resource "azurerm_network_interface_security_group_association" "nsg_assoc" {
 
 variable "vms" {
   default = {
-    frontend    = ""
-    mongodb     = ""
-    catalog     = ""
-    user        = ""
-    redis       = ""
-    cart        = ""
-    mysql       = ""
-    shipping    = ""
-    rabbitmq    = ""
-    payment     = ""
+    frontend    = "10.0.1.8"
+    mongodb     = "10.0.1.9"
+    catalogu   = "10.0.1.13"
+    user        = "10.0.1.7"
+    redis       = "10.0.1.4"
+    cart        = "10.0.1.11"
+    mysql       = "10.0.1.12"
+    shipping    = "10.0.1.5"
+    rabbitmq    = "10.0.1.10"
+    payment     = "10.0.1.6"
   }
 }
 
@@ -135,3 +135,25 @@ resource "azurerm_linux_virtual_machine" "vm" {
   }
 }
 
+resource "null_resource" "ansible" {
+  depends_on = [
+    azurerm_linux_virtual_machine.vm
+  ]
+
+  for_each   = var.vms
+
+  provisioner "remote-exec" {
+    connection {
+      type      = "ssh"
+      user      = "ec2-user"
+      password  = "DevOps321"
+      host      = each.value
+    }
+
+    inline = [
+      "sudo dnf install ansible -y",
+      "ansible-pull -i localhost, -U https://github.com/Sandeepkumar0088/roboshop-ansible-templates.git main.yml -e component=${each.key} -e env=dev"
+    ]
+
+  }
+}
