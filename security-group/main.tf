@@ -93,7 +93,7 @@ variable "vms" {
   default = {
     frontend    = "10.0.1.8"
     mongodb     = "10.0.1.9"
-    catalog     = "10.0.1.13"
+    catalogue   = "10.0.1.13"
     user        = "10.0.1.7"
     redis       = "10.0.1.4"
     cart        = "10.0.1.11"
