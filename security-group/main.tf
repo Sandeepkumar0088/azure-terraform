@@ -135,25 +135,25 @@ resource "azurerm_linux_virtual_machine" "vm" {
   }
 }
 
-resource "null_resource" "ansible" {
-  depends_on = [
-    azurerm_linux_virtual_machine.vm
-  ]
-
-  for_each   = var.vms
-
-  provisioner "remote-exec" {
-    connection {
-      type      = "ssh"
-      user      = "sandeep"
-      password  = "Sandeep.,@0088"
-      host      = azurerm_linux_virtual_machine.vm[each.key].public_ip_address
-    }
-
-    inline = [
-      "sudo dnf install ansible-core npm unzip -y",
-      "ansible-pull -i localhost, -U https://github.com/Sandeepkumar0088/roboshop-ansible-templates.git main.yml -e component=${each.key} -e env=dev"
-    ]
-
-  }
-}
+# resource "null_resource" "ansible" {
+#   depends_on = [
+#     azurerm_linux_virtual_machine.vm
+#   ]
+#
+#   for_each   = var.vms
+#
+#   provisioner "remote-exec" {
+#     connection {
+#       type      = "ssh"
+#       user      = "sandeep"
+#       password  = "Sandeep.,@0088"
+#       host      = azurerm_linux_virtual_machine.vm[each.key].public_ip_address
+#     }
+#
+#     inline = [
+#       "sudo dnf install ansible-core npm unzip -y",
+#       "ansible-pull -i localhost, -U https://github.com/Sandeepkumar0088/roboshop-ansible-templates.git main.yml -e component=${each.key} -e env=dev"
+#     ]
+#
+#   }
+# }
