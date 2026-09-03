@@ -146,7 +146,7 @@ resource "azurerm_linux_virtual_machine" "vm" {
   }
 }
 
-resource "azurerm_dns_zone" "main" {
+data "azurerm_dns_zone" "main" {
   name = "sandeepkumarpenta.online"
   resource_group_name = azurerm_resource_group.rg.name
 }
@@ -160,7 +160,7 @@ resource "azurerm_dns_a_record" "records" {
   for_each = var.vms
 
   name = "${each.key}-dev"
-  zone_name = azurerm_dns_zone.main.name
+  zone_name = data.azurerm_dns_zone.main.name
   resource_group_name = azurerm_resource_group.rg.name
   ttl = 5
   records = [ azurerm_linux_virtual_machine.vm[each.key].private_ip_address ]
