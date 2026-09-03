@@ -179,15 +179,14 @@ resource "null_resource" "ansible" {
       type      = "ssh"
       user      = "sandeep"
       password  = "Sandeep.,@0088"
-      host      = azurerm_linux_virtual_machine.vm[each.key].private_ip_address
+      host      = azurerm_linux_virtual_machine.vm[each.key].public_ip_address
     }
 
     inline = [
       "echo 'sandeep' > vault-pass.txt",
       "chmod 600 vault-pass.txt",
       "sudo dnf install ansible-core npm unzip -y",
-      "ansible-pull -i localhost, -U https://github.com/Sandeepkumar0088/azure-ansible.git main.yml -e component=${each.key} -e env=dev --vault-password-file vault-pass.txt"
+      "ansible-pull -i ${each.key}-dev.sandeepkumarpenta.online, -U https://github.com/Sandeepkumar0088/azure-ansible.git main.yml -e component=${each.key} -e env=dev --vault-password-file vault-pass.txt"
     ]
-
   }
 }
