@@ -147,7 +147,7 @@ resource "azurerm_linux_virtual_machine" "vm" {
 }
 
 resource "azurerm_dns_zone" "main" {
-  name = "sandeepkumar.com"
+  name = "sandeepkumarpenta.online"
   resource_group_name = azurerm_resource_group.rg.name
 }
 
