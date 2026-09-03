@@ -161,7 +161,7 @@ resource "azurerm_dns_a_record" "records" {
 
   name = "${each.key}-dev"
   zone_name = data.azurerm_dns_zone.main.name
-  resource_group_name = azurerm_resource_group.rg.name
+  resource_group_name = data.azurerm_dns_zone.main.resource_group_name
   ttl = 5
   records = [ azurerm_linux_virtual_machine.vm[each.key].private_ip_address ]
 }
