@@ -176,17 +176,18 @@ resource "null_resource" "ansible" {
 
   provisioner "remote-exec" {
     connection {
-      type      = "ssh"
-      user      = "sandeep"
-      password  = "Sandeep.,@0088"
-      host      = azurerm_linux_virtual_machine.vm[each.key].public_ip_address
+      type     = "ssh"
+      user     = "sandeep"
+      password = "Sandeep.,@0088"
+      host     = azurerm_linux_virtual_machine.vm[each.key].public_ip_address
+      timeout  = "5m"
     }
 
     inline = [
-      "echo 'sandeep' > vault-pass.txt",
-      "chmod 600 vault-pass.txt",
-      "sudo dnf install ansible-core npm unzip -y",
-      "ansible-pull -i ${each.key}-dev.sandeepkumarpenta.online, -U https://github.com/Sandeepkumar0088/azure-ansible.git main.yml -e component=${each.key} -e env=dev --vault-password-file vault-pass.txt"
+      "echo 'sandeep' > ~/vault-pass.txt",
+      "chmod 600 ~/vault-pass.txt",
+      "sudo dnf install -y ansible-core git",
+      "ansible-pull -U https://github.com/Sandeepkumar0088/azure-ansible.git main.yml -e component=${each.key} -e env=dev --vault-password-file ~/vault-pass.txt"
     ]
   }
 }
