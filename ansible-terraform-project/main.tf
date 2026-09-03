@@ -187,7 +187,7 @@ resource "null_resource" "ansible" {
       "echo 'sandeep' > ~/vault-pass.txt",
       "chmod 600 ~/vault-pass.txt",
       "sudo dnf install -y ansible-core git",
-      "ansible-pull -U https://github.com/Sandeepkumar0088/azure-ansible.git main.yml -e component=${each.key} -e env=dev --vault-password-file ~/vault-pass.txt"
+      "ansible-pull -i localhost, -U https://github.com/Sandeepkumar0088/azure-ansible.git main.yml -e component=${each.key} -e env=dev --vault-password-file ~/vault-pass.txt"
     ]
   }
 }
