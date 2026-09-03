@@ -152,6 +152,11 @@ resource "azurerm_dns_zone" "main" {
 }
 
 resource "azurerm_dns_a_record" "records" {
+
+  depends_on = [
+    azurerm_linux_virtual_machine.vm
+  ]
+
   for_each = var.vms
 
   name = "${each.key}-dev"
