@@ -99,7 +99,7 @@ resource "azurerm_linux_virtual_machine" "vm" {
   disable_password_authentication = false
 
   network_interface_ids = [
-    azurerm_network_interface.nic.id
+    azurerm_network_interface.nic[each.key].id
   ]
 
   os_disk {
