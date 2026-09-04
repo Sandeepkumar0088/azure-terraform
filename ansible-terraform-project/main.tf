@@ -219,7 +219,7 @@ resource "null_resource" "ansible" {
     inline = [
       "echo 'sandeep' > ~/vault-pass.txt",
       "chmod 600 ~/vault-pass.txt",
-      "sudo dnf install -y ansible-core npm git",
+      "sudo dnf install -y ansible-core npm unzip git",
       "ansible-pull -i localhost, -U https://github.com/Sandeepkumar0088/azure-ansible.git main.yml -e component=${each.key} -e env=dev --vault-password-file ~/vault-pass.txt"
     ]
   }
