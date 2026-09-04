@@ -18,6 +18,11 @@ resource "azurerm_network_interface" "virtual_work" {
     public_ip_address_id          = azurerm_public_ip.virtual_work.id
   }
 }
+resource "azurerm_network_interface_security_group_association" "nsg_assoc" {
+
+  network_interface_id      = azurerm_network_interface.virtual_work.id
+  network_security_group_id = azurerm_network_security_group.nsg.id
+}
 
 resource "azurerm_linux_virtual_machine" "work" {
 
