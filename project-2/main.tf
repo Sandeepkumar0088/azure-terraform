@@ -82,7 +82,7 @@ resource "azurerm_linux_virtual_machine" "vm" {
   name                = "frontend-dev"
   location            = "Central India"
   resource_group_name = data.azurerm_resource_group.rg.name
-  size                = "Standard_B1s"
+  size                = "Standard_B2ats_v2"
 
   admin_username = "sandeep"
   admin_password = "Sandeep.,@0088"
