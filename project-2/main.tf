@@ -22,7 +22,10 @@ data "azurerm_subnet" "subnet" {
 
 # Public IP
 resource "azurerm_public_ip" "pip" {
-  name                = "vm-pip"
+
+  for_each            = var.vms
+
+  name                = each.key
   location            = "Central India"
   resource_group_name = data.azurerm_resource_group.rg.name
   allocation_method   = "Static"
@@ -31,7 +34,10 @@ resource "azurerm_public_ip" "pip" {
 
 # NIC attached to existing subnet
 resource "azurerm_network_interface" "nic" {
-  name                = "vm-nic"
+
+  for_each            = var.vms
+
+  name                = "${each.key}-nic"
   location            = "Central India"
   resource_group_name = data.azurerm_resource_group.rg.name
 
@@ -39,7 +45,7 @@ resource "azurerm_network_interface" "nic" {
     name                          = "internal"
     subnet_id                     = data.azurerm_subnet.subnet.id
     private_ip_address_allocation = "Dynamic"
-    public_ip_address_id          = azurerm_public_ip.pip.id
+    public_ip_address_id          = azurerm_public_ip.pip[each.key].id
   }
 }
 # NSG
@@ -79,7 +85,10 @@ resource "azurerm_subnet_network_security_group_association" "nsg_assoc" {
 }
 
 resource "azurerm_linux_virtual_machine" "vm" {
-  name                = "frontend-dev"
+
+  for_each            = var.vms
+
+  name                = each.key
   location            = "Central India"
   resource_group_name = data.azurerm_resource_group.rg.name
   size                = "Standard_B2ats_v2"
