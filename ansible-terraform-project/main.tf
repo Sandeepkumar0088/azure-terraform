@@ -96,16 +96,16 @@ resource "azurerm_network_interface_security_group_association" "nsg_assoc" {
 
 variable "vms" {
   default = {
-    frontend    = "10.0.1.8"
-    mongodb     = "10.0.1.9"
-    catalogue   = "10.0.1.13"
-    user        = "10.0.1.7"
-    redis       = "10.0.1.4"
-    cart        = "10.0.1.11"
-    mysql       = "10.0.1.12"
-    shipping    = "10.0.1.5"
-    rabbitmq    = "10.0.1.10"
-    payment     = "10.0.1.6"
+    frontend    = "Standard_B2ats_v2"
+    mongodb     = "Standard_B2ats_v2"
+    catalogue   = "Standard_B2ats_v2"
+    user        = "Standard_B2ats_v2"
+    redis       = "Standard_B2ats_v2"
+    cart        = "Standard_B2ats_v2"
+    mysql       = "Standard_D4ls_v6"
+    shipping    = "Standard_B2ats_v2"
+    rabbitmq    = "Standard_B2ats_v2"
+    payment     = "Standard_B2ats_v2"
   }
 }
 
