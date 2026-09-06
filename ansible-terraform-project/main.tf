@@ -38,64 +38,10 @@ resource "azurerm_public_ip" "pip" {
   allocation_method   = "Static"
 }
 
-# resource "azurerm_network_security_group" "nsg" {
-#   name                = "my-nsg"
-#   location            = azurerm_resource_group.rg.location
-#   resource_group_name = azurerm_resource_group.rg.name
-#
-#   security_rule {
-#     name                       = "Allow-SSH"
-#     priority                   = 100
-#     direction                  = "Inbound"
-#     access                     = "Allow"
-#     protocol                   = "Tcp"
-#     source_port_range          = "*"
-#     destination_port_range     = "22"
-#     source_address_prefix      = "*"
-#     destination_address_prefix = "*"
-#   }
-#
-#   security_rule {
-#     name                       = "Allow-HTTP"
-#     priority                   = 110
-#     direction                  = "Inbound"
-#     access                     = "Allow"
-#     protocol                   = "Tcp"
-#     source_port_range          = "*"
-#     destination_port_range     = "80"
-#     source_address_prefix      = "*"
-#     destination_address_prefix = "*"
-#   }
-#
-#   security_rule {
-#     name                       = "Allow-8080"
-#     priority                   = 120
-#     direction                  = "Inbound"
-#     access                     = "Allow"
-#     protocol                   = "Tcp"
-#     source_port_range          = "*"
-#     destination_port_range     = "8080"
-#     source_address_prefix      = "*"
-#     destination_address_prefix = "*"
-#   }
-# }
-
 resource "azurerm_network_security_group" "nsg" {
   name                = "my-nsg"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
-
-  # security_rule {
-  #   name                       = "Allow-SSH"
-  #   priority                   = 100
-  #   direction                  = "Inbound"
-  #   access                     = "Allow"
-  #   protocol                   = "Tcp"
-  #   source_port_range          = "*"
-  #   destination_port_range     = "22"
-  #   source_address_prefix      = "0.0.0.0/0"
-  #   destination_address_prefix = "*"
-  # }
 
   # Allow ALL inbound traffic
   security_rule {
@@ -213,29 +159,29 @@ resource "azurerm_dns_a_record" "records" {
   records = [ azurerm_linux_virtual_machine.vm[each.key].private_ip_address ]
 }
 
-# resource "null_resource" "ansible" {
-#   depends_on = [
-#     azurerm_linux_virtual_machine.vm,
-#     azurerm_dns_a_record.records
-#   ]
-#
-#   for_each   = var.vms
-#
-#   provisioner "remote-exec" {
-#     connection {
-#       type     = "ssh"
-#       user     = "sandeep"
-#       password = "Sandeep.,@0088"
-#       host     = azurerm_linux_virtual_machine.vm[each.key].public_ip_address
-#       timeout  = "5m"
-#     }
-#
-#     inline = [
-#       "echo 'sandeep' > ~/vault-pass.txt",
-#       "chmod 600 ~/vault-pass.txt",
-#       "sudo dnf install -y ansible-core npm unzip git",
-#       # "ansible-pull -i localhost, -U https://github.com/Sandeepkumar0088/azure-ansible.git main.yml -e component=${each.key} -e env=dev --vault-password-file ~/vault-pass.txt",
-#       "ansible-pull -i localhost, --limit all -U https://github.com/Sandeepkumar0088/azure-ansible.git main.yml -e component=${each.key} -e env=dev --vault-password-file ~/vault-pass.txt"
-#     ]
-#   }
-# }
+resource "null_resource" "ansible" {
+  depends_on = [
+    azurerm_linux_virtual_machine.vm,
+    azurerm_dns_a_record.records
+  ]
+
+  for_each   = var.vms
+
+  provisioner "remote-exec" {
+    connection {
+      type     = "ssh"
+      user     = "sandeep"
+      password = "Sandeep.,@0088"
+      host     = azurerm_linux_virtual_machine.vm[each.key].public_ip_address
+      timeout  = "5m"
+    }
+
+    inline = [
+      "echo 'sandeep' > ~/vault-pass.txt",
+      "chmod 600 ~/vault-pass.txt",
+      "sudo dnf install -y ansible-core npm unzip git",
+      # "ansible-pull -i localhost, -U https://github.com/Sandeepkumar0088/azure-ansible.git main.yml -e component=${each.key} -e env=dev --vault-password-file ~/vault-pass.txt",
+      "ansible-pull -i localhost, --limit all -U https://github.com/Sandeepkumar0088/azure-ansible.git main.yml -e component=${each.key} -e env=dev --vault-password-file ~/vault-pass.txt"
+    ]
+  }
+}
