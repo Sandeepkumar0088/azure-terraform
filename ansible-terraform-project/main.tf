@@ -116,7 +116,7 @@ resource "azurerm_linux_virtual_machine" "vm" {
   name                = each.key
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
-  size                = "Standard_B2ats_v2"
+  size                = each.value
 
   admin_username = "sandeep"
   admin_password = "Sandeep.,@0088"
