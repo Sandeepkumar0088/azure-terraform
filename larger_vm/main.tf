@@ -73,7 +73,7 @@ resource "azurerm_network_security_group" "nsg" {
 
 resource "azurerm_network_interface" "nic" {
 
-  name                = "alma-nic-"
+  name                = "alma-nic"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
 
@@ -94,7 +94,7 @@ resource "azurerm_network_interface_security_group_association" "nsg_assoc" {
 
 resource "azurerm_linux_virtual_machine" "vm" {
 
-  name                = jenkins
+  name                = "jenkins"
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
   size                = "Standard_D4ls_v6"
