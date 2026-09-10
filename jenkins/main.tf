@@ -130,34 +130,19 @@ resource "null_resource" "jenkins" {
   provisioner "remote-exec" {
     inline = [
       "sudo dnf update -y",
-
-      # Java
-      # "sudo dnf install -y fontconfig java-21-openjdk java-21-openjdk-devel git",
-      # "sudo alternatives --set java /usr/lib/jvm/java-21-openjdk/bin/java",
-      # "java -version",
-
-      # Jenkins
-      # "sudo curl -L -o /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/rpm-stable/jenkins.repo",
-      # "sudo rpm --import https://pkg.jenkins.io/rpm-stable/jenkins.io-2026.key",
-      # "sudo dnf install -y jenkins",
-      # "sudo systemctl daemon-reload",
-      # "sudo systemctl enable jenkins",
-
-      # Docker
-      # "sudo dnf install -y dnf-plugins-core",
-      # "sudo dnf config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo",
-      # "sudo dnf install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin",
-      # "sudo systemctl enable docker",
-      # "sudo systemctl start docker",
-
-      # Jenkins Docker permissions
-      # "sudo usermod -aG docker jenkins",
-
-      # Maven
-      # "sudo dnf install -y maven",
-
-      # Start Jenkins AFTER Docker group configuration
-      # "sudo systemctl start jenkins"
+      "sudo dnf install git java-21-openjdk -y",
+      "sudo curl -L -o /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/rpm-stable/jenkins.repo",
+      "sudo rpm --import https://pkg.jenkins.io/rpm-stable/jenkins.io-2026.key",
+      "sudo yum install jenkins -y",
+      "sudo systemctl enable jenkins",
+      "sudo systemctl start jenkins",
+      "sudo dnf install -y dnf-plugins-core",
+      "sudo dnf config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo",
+      "sudo dnf install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin",
+      "sudo systemctl enable docker",
+      "sudo systemctl start docker",
+      "sudo usermod -aG docker jenkins",
+      "sudo dnf install maven -y"
     ]
   }
 }
