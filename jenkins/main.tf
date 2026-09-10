@@ -142,7 +142,7 @@ resource "null_resource" "jenkins" {
       "sudo systemctl enable docker",
       "sudo systemctl start docker",
       "sudo usermod -aG docker jenkins",
-      "dnf install maven -y"
+      "sudo dnf install maven -y"
     ]
   }
 }
