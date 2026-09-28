@@ -102,6 +102,29 @@ resource "azurerm_network_interface_backend_address_pool_association" "pool_asso
   backend_address_pool_id = azurerm_lb_backend_address_pool.pool.id
 }
 
+resource "azurerm_lb_nat_pool" "ssh" {
+  name                           = "ssh-nat-pool"
+  resource_group_name            = azurerm_resource_group.rg.name
+  loadbalancer_id                = azurerm_lb.lb.id
+  protocol                       = "Tcp"
+
+  frontend_port_start            = 50000
+  frontend_port_end              = 50002
+
+  backend_port                   = 22
+
+  frontend_ip_configuration_name = "frontend"
+}
+
+resource "azurerm_network_interface_nat_rule_association" "ssh" {
+  count = 3
+
+  network_interface_id  = azurerm_network_interface.nic[count.index].id
+  ip_configuration_name = "internal"
+
+  nat_rule_id = azurerm_lb_nat_pool.ssh.id
+}
+
 resource "azurerm_linux_virtual_machine" "vm" {
   count               = 3
   name                = "vm-${count.index + 1}"
