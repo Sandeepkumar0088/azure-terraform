@@ -13,6 +13,7 @@ resource "azurerm_virtual_machine" "restored" {
     managed_disk_id   = azurerm_managed_disk.restored_os.id
     create_option     = "Attach"
     caching           = "ReadWrite"
+    os_type           = "Linux"
   }
 
   delete_os_disk_on_termination = false
