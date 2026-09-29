@@ -1,12 +1,19 @@
-resource "azurerm_linux_virtual_machine" "restored" {
+resource "azurerm_virtual_machine" "restored" {
   name                = var.new_vm_name
-  location            = var.location
   resource_group_name = var.resource_group_name
-  size                = var.vm_size
+  location            = var.location
+  vm_size             = var.vm_size
 
   network_interface_ids = [
-    azurerm_network_interface.restored.id
+    azurerm_network_interface.restore.id
   ]
 
-  os_managed_disk_id = azurerm_managed_disk.restored_os.id
+  storage_os_disk {
+    name              = azurerm_managed_disk.restored_os.name
+    managed_disk_id   = azurerm_managed_disk.restored_os.id
+    create_option     = "Attach"
+    caching           = "ReadWrite"
+  }
+
+  delete_os_disk_on_termination = false
 }
