@@ -1,7 +1,7 @@
 variable "source_resource_group_name" {
   description = "Resource group containing the VM"
   type        = string
-  default     = "devops54"
+  default     = "rg-almalinux"
 }
 
 variable "vm_name" {
