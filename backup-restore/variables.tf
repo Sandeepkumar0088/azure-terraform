@@ -7,13 +7,13 @@ variable "source_resource_group_name" {
 variable "vm_name" {
   description = "Existing VM to protect"
   type        = string
-  default     = "devops-vm"
+  default     = "jenkins"
 }
 
 variable "backup_resource_group_name" {
   description = "Resource group for backup resources"
   type        = string
-  default     = "backup-rg"
+  default     = "rg-almalinux"
 }
 
 variable "location" {
