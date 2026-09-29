@@ -141,3 +141,11 @@ resource "null_resource" "ansible" {
     ]
   }
 }
+resource "azurerm_snapshot" "nginx" {
+  name                = "nginx-os-snapshot"
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
+
+  create_option      = "Copy"
+  source_resource_id = azurerm_linux_virtual_machine.vm.os_disk[0].id
+}

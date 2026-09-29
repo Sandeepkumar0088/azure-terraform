@@ -10,12 +10,12 @@ variable "location" {
 
 variable "snapshot_name" {
   type    = string
-  default = "jenkins-os-snapshot"
+  default = "nginx-os-snapshot"
 }
 
 variable "new_vm_name" {
   type    = string
-  default = "jenkins-restored"
+  default = "nginx-restored"
 }
 
 variable "vm_size" {
