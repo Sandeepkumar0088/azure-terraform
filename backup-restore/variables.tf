@@ -13,7 +13,7 @@ variable "vm_name" {
 variable "backup_resource_group_name" {
   description = "Resource group for backup resources"
   type        = string
-  default     = "rg-almalinux"
+  default     = "backed-up"
 }
 
 variable "location" {
