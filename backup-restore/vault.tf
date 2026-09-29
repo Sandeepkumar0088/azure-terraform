@@ -6,6 +6,4 @@ resource "azurerm_recovery_services_vault" "backup" {
   sku = "Standard"
 
   storage_mode_type = "GeoRedundant"
-
-  soft_delete_enabled = true
 }
