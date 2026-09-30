@@ -1,3 +1,7 @@
+provider "azurerm" {
+  features {}
+}
+
 resource "azurerm_resource_group" "vms" {
   name = "vms"
   location = "Central India"
