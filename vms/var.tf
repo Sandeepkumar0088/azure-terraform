@@ -1,7 +1,6 @@
 variable "vms" {
   default = {
-    node1       = "Standard_B2ats_v2"
-    node2       = "Standard_B2ats_v2"
+    node       = "Standard_B2ats_v2"
   }
 }
 
