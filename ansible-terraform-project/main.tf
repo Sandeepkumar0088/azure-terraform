@@ -12,7 +12,7 @@ provider "azurerm" {
 }
 
 resource "azurerm_resource_group" "rg" {
-  name     = "rg-almalinux"
+  name     = "roboshop-rg"
   location = "Central India"
 }
 
