@@ -63,19 +63,20 @@ resource "azurerm_backup_policy_vm" "daily" {
 # --------------------------------------------------
 
 variable "vm_names" {
+  type = set(string)
 
-  default = {
-    frontend    = ""
-    mongodb     = ""
-    catalogue   = ""
-    user        = ""
-    redis       = ""
-    cart        = ""
-    mysql       = ""
-    shipping    = ""
-    rabbitmq    = ""
-    payment     = ""
-  }
+  default = [
+    "frontend",
+    "mongodb",
+    "catalogue",
+    "user",
+    "redis",
+    "cart",
+    "mysql",
+    "shipping",
+    "rabbitmq",
+    "payment"
+  ]
 }
 
 
@@ -87,7 +88,7 @@ data "azurerm_virtual_machine" "vm" {
 
   for_each = var.vm_names
 
-  name                = each.key
+  name                = each.value
   resource_group_name = "roboshop-rg"
 }
 
