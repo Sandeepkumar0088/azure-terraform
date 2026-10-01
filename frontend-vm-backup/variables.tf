@@ -1,6 +1,6 @@
 variable "resource_group_name" {
   type    = string
-  default = "rg-almalinux"
+  default = "frontend-rg"
 }
 
 variable "location" {
@@ -10,15 +10,15 @@ variable "location" {
 
 variable "vm_name" {
   type    = string
-  default = "nginx"
+  default = "jenkins"
 }
 
 variable "vault_name" {
   type    = string
-  default = "nginx-backup-vault"
+  default = "frontend-backup-vault"
 }
 
 variable "backup_policy_name" {
   type    = string
-  default = "nginx-daily-backup-policy"
+  default = "frontend-daily-backup-policy"
 }
