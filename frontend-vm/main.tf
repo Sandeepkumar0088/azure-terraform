@@ -136,8 +136,15 @@ resource "null_resource" "ansible" {
     }
 
     inline = [
-      "sudo dnf install -y nginx",
-      "sudo systemctl enable --now nginx"
+      "dnf module disable nginx -y",
+      "dnf module enable nginx:1.24 -y",
+      "dnf install nginx unzip -y",
+      "rm -rf /usr/share/nginx/html/*",
+      "curl -L -o /tmp/frontend.zip https://roboshop-artifacts.s3.amazonaws.com/frontend-v3.zip",
+      "unzip -o /tmp/frontend.zip -d /usr/share/nginx/html",
+      "cp nginx.conf /etc/nginx/nginx.conf",
+      "systemctl enable nginx",
+      "systemctl restart nginx"
     ]
   }
 }
