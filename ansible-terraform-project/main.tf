@@ -108,6 +108,25 @@ variable "vms" {
     payment     = "Standard_B2ats_v2"
   }
 }
+variable "vms1" {
+  default = {
+    frontend    = "Standard_B2ats_v2"
+    mongodb     = "Standard_B2ats_v2"
+    catalogue   = "Standard_B2ats_v2"
+    user        = "Standard_B2ats_v2"
+    redis       = "Standard_B2ats_v2"
+    cart        = "Standard_B2ats_v2"
+    mysql       = "Standard_D4ls_v6"
+    # shipping    = "Standard_B2ats_v2"
+    rabbitmq    = "Standard_B2ats_v2"
+    payment     = "Standard_B2ats_v2"
+  }
+}
+variable "vms2" {
+  default = {
+    shipping    = "Standard_B2ats_v2"
+  }
+}
 
 resource "azurerm_linux_virtual_machine" "vm" {
 
@@ -159,13 +178,40 @@ resource "azurerm_dns_a_record" "records" {
   records = [ azurerm_linux_virtual_machine.vm[each.key].private_ip_address ]
 }
 
-resource "null_resource" "ansible" {
+resource "null_resource" "ansible1" {
   depends_on = [
     azurerm_linux_virtual_machine.vm,
     azurerm_dns_a_record.records
   ]
 
-  for_each   = var.vms
+  for_each   = var.vms1
+
+  provisioner "remote-exec" {
+    connection {
+      type     = "ssh"
+      user     = "sandeep"
+      password = "Sandeep.,@0088"
+      host     = azurerm_linux_virtual_machine.vm[each.key].public_ip_address
+      timeout  = "5m"
+    }
+
+    inline = [
+      "echo 'sandeep' > ~/vault-pass.txt",
+      "chmod 600 ~/vault-pass.txt",
+      "sudo dnf install -y ansible-core npm unzip git",
+      # "ansible-pull -i localhost, -U https://github.com/Sandeepkumar0088/azure-ansible.git main.yml -e component=${each.key} -e env=dev --vault-password-file ~/vault-pass.txt",
+      "ansible-pull -i localhost, --limit all -U https://github.com/Sandeepkumar0088/azure-ansible.git main.yml -e component=${each.key} -e env=dev --vault-password-file ~/vault-pass.txt"
+    ]
+  }
+}
+resource "null_resource" "ansible2" {
+  depends_on = [
+    azurerm_linux_virtual_machine.vm,
+    azurerm_dns_a_record.records,
+    null_resource.ansible1
+  ]
+
+  for_each   = var.vms2
 
   provisioner "remote-exec" {
     connection {
