@@ -27,7 +27,7 @@ resource "azurerm_resource_group" "backup" {
 # --------------------------------------------------
 
 resource "azurerm_recovery_services_vault" "backup" {
-  name                = "roboshop-project-backup-vms"
+  name                = "roboshop-project-backup-vault"
   location            = azurerm_resource_group.backup.location
   resource_group_name = azurerm_resource_group.backup.name
 
@@ -41,7 +41,7 @@ resource "azurerm_recovery_services_vault" "backup" {
 # --------------------------------------------------
 
 resource "azurerm_backup_policy_vm" "daily" {
-  name                = "devops-daily-backup"
+  name                = "roboshop-project-backup-policy"
   resource_group_name = azurerm_resource_group.backup.name
   recovery_vault_name = azurerm_recovery_services_vault.backup.name
 
