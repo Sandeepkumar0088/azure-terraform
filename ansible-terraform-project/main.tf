@@ -72,6 +72,11 @@ resource "azurerm_network_security_group" "nsg" {
   }
 }
 
+resource "azurerm_subnet_network_security_group_association" "attach_nsg_to_subnet" {
+  subnet_id                 = azurerm_subnet.subnet.id
+  network_security_group_id = azurerm_network_security_group.nsg.id
+}
+
 resource "azurerm_network_interface" "nic" {
 
   for_each = var.vms
@@ -87,12 +92,12 @@ resource "azurerm_network_interface" "nic" {
   }
 }
 
-resource "azurerm_network_interface_security_group_association" "nsg_assoc" {
-  for_each = var.vms
-
-  network_interface_id      = azurerm_network_interface.nic[each.key].id
-  network_security_group_id = azurerm_network_security_group.nsg.id
-}
+# resource "azurerm_network_interface_security_group_association" "nsg_assoc" {
+#   for_each = var.vms
+#
+#   network_interface_id      = azurerm_network_interface.nic[each.key].id
+#   network_security_group_id = azurerm_network_security_group.nsg.id
+# }
 
 variable "vms" {
   default = {
