@@ -142,14 +142,7 @@ resource "null_resource" "ansible" {
       "curl -L -o /tmp/frontend.zip https://roboshop-artifacts.s3.amazonaws.com/frontend-v3.zip",
       "sudo unzip -o /tmp/frontend.zip -d /usr/share/nginx/html",
       "sudo systemctl enable nginx",
-      "sudo systemctl restart nginx"
-
-
-
-
-
-
-      
+      "sudo systemctl restart nginx"      
     ]
   }
 }
