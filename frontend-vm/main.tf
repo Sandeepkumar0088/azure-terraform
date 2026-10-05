@@ -143,6 +143,13 @@ resource "null_resource" "ansible" {
       "sudo unzip -o /tmp/frontend.zip -d /usr/share/nginx/html",
       "sudo systemctl enable nginx",
       "sudo systemctl restart nginx"
+
+
+
+
+
+
+      
     ]
   }
 }
