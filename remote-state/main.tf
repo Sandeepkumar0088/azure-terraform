@@ -107,29 +107,29 @@ resource "azurerm_linux_virtual_machine" "vm" {
   }
 }
 
-# resource "null_resource" "ansible" {
-#   depends_on = [
-#     azurerm_linux_virtual_machine.vm
-#   ]
+resource "null_resource" "ansible" {
+  depends_on = [
+    azurerm_linux_virtual_machine.vm
+  ]
 
-#   provisioner "remote-exec" {
-#     connection {
-#       type     = "ssh"
-#       user     = "sandeep"
-#       password = "Sandeep.,@0088"
-#       host     = azurerm_linux_virtual_machine.vm.public_ip_address
-#       timeout  = "2m"
-#     }
+  provisioner "remote-exec" {
+    connection {
+      type     = "ssh"
+      user     = "sandeep"
+      password = "Sandeep.,@0088"
+      host     = azurerm_linux_virtual_machine.vm.public_ip_address
+      timeout  = "2m"
+    }
 
-#     inline = [
-#       "sudo dnf module disable nginx -y",
-#       "sudo dnf module enable nginx:1.24 -y",
-#       "sudo dnf install nginx unzip -y",
-#       "sudo rm -rf /usr/share/nginx/html/*",
-#       "curl -L -o /tmp/frontend.zip https://roboshop-artifacts.s3.amazonaws.com/frontend-v3.zip",
-#       "sudo unzip -o /tmp/frontend.zip -d /usr/share/nginx/html",
-#       "sudo systemctl enable nginx",
-#       "sudo systemctl restart nginx"      
-#     ]
-#   }
-# }
+    inline = [
+      "sudo dnf module disable nginx -y",
+      "sudo dnf module enable nginx:1.24 -y",
+      "sudo dnf install nginx unzip -y",
+      "sudo rm -rf /usr/share/nginx/html/*",
+      "curl -L -o /tmp/frontend.zip https://roboshop-artifacts.s3.amazonaws.com/frontend-v3.zip",
+      "sudo unzip -o /tmp/frontend.zip -d /usr/share/nginx/html",
+      "sudo systemctl enable nginx",
+      "sudo systemctl restart nginx"      
+    ]
+  }
+}
