@@ -13,7 +13,7 @@ provider "azurerm" {
 
 resource "azurerm_resource_group" "rg" {
   name     = "frontend-rg"
-  location = "East US"
+  location = "Central India"
 }
 
 resource "azurerm_virtual_network" "vnet" {
