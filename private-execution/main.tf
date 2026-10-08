@@ -424,3 +424,24 @@ resource "azurerm_linux_virtual_machine" "private" {
     version   = "latest"
   }
 }
+
+data "azurerm_dns_zone" "main" {
+  name = "sandeepkumarpenta.online"
+  resource_group_name = "azure"
+}
+
+resource "azurerm_dns_a_record" "records" {
+
+  depends_on = [
+    azurerm_linux_virtual_machine.private,
+    azurerm_linux_virtual_machine.bastion
+  ]
+
+  for_each = var.private_vm_ips
+
+  name = "${each.key}-dev"
+  zone_name = data.azurerm_dns_zone.main.name
+  resource_group_name = data.azurerm_dns_zone.main.resource_group_name
+  ttl = 5
+  records = [ azurerm_linux_virtual_machine.private[each.key].private_ip_address ]
+}
