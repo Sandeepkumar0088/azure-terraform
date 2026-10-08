@@ -148,6 +148,8 @@ resource "azurerm_lb_rule" "frontend_http" {
 
   floating_ip_enabled = false
 
+
+
   disable_outbound_snat = true
 }
 
