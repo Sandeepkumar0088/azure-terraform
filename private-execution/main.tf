@@ -297,7 +297,7 @@ resource "azurerm_network_interface" "bastion" {
 
     private_ip_address_allocation = "Static"
 
-    private_ip_address = azurerm_linux_virtual_machine.bastion.private_ip_address
+    private_ip_address = "10.20.1.4"
 
     public_ip_address_id = azurerm_public_ip.bastion.id
   }
