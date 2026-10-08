@@ -346,7 +346,7 @@ resource "azurerm_linux_virtual_machine" "bastion" {
 
   location = azurerm_resource_group.main.location
 
-  size = var.vm_size
+  size = "Standard_B2ats_v2"
 
   admin_username = var.admin_username
 
