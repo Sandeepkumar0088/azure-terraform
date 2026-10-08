@@ -103,7 +103,7 @@ resource "azurerm_lb_backend_address_pool" "frontend" {
 
 resource "azurerm_network_interface_backend_address_pool_association" "frontend" {
   network_interface_id    = data.azurerm_network_interface.frontend.id
-  ip_configuration_name   = "ipconfig1"
+  ip_configuration_name   = "internal"
   backend_address_pool_id = azurerm_lb_backend_address_pool.frontend.id
 }
 
