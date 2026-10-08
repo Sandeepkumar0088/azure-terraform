@@ -408,7 +408,7 @@ resource "azurerm_linux_virtual_machine" "private" {
   disable_password_authentication = false
 
   network_interface_ids = [
-    each.value.id
+    azurerm_network_interface.private[each.key].id
   ]
 
   os_disk {
