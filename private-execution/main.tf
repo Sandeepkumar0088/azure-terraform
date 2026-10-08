@@ -143,19 +143,19 @@ resource "azurerm_network_security_group" "bastion" {
   # SSH FROM MANAGEMENT SERVER TO BASTION
   # ----------------------------------------------------------
 
-  security_rule {
-    name                       = "Allow-SSH-Management-To-Bastion"
-    priority                   = 100
-    direction                  = "Inbound"
-    access                     = "Allow"
-    protocol                   = "Tcp"
+security_rule {
+  name                       = "Allow-SSH-Management-To-Bastion"
+  priority                   = 100
+  direction                  = "Inbound"
+  access                     = "Allow"
+  protocol                   = "Tcp"
 
-    source_port_range      = "*"
-    destination_port_range = "22"
+  source_port_range      = "*"
+  destination_port_range = "22"
 
-    source_address_prefix      = "10.1.1.0/24"
-    destination_address_prefix = "*"
-  }
+  source_address_prefix      = "20.192.13.93/32"
+  destination_address_prefix = "*"
+}
 
   # ----------------------------------------------------------
   # ALLOW VNET TRAFFIC
