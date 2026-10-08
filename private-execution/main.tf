@@ -153,7 +153,7 @@ resource "azurerm_network_security_group" "bastion" {
     source_port_range      = "*"
     destination_port_range = "22"
 
-    source_address_prefix      = var.management_cidr
+    source_address_prefix      = "10.1.1.0/24"
     destination_address_prefix = "*"
   }
 
@@ -364,15 +364,22 @@ resource "azurerm_linux_virtual_machine" "bastion" {
     storage_account_type = "Standard_LRS"
   }
 
-  source_image_reference {
+#   source_image_reference {
 
-    publisher = var.almalinux_publisher
+#     publisher = var.almalinux_publisher
 
-    offer = var.almalinux_offer
+#     offer = var.almalinux_offer
 
-    sku = var.almalinux_sku
+#     sku = var.almalinux_sku
 
-    version = var.almalinux_version
+#     version = var.almalinux_version
+#   }
+
+    source_image_reference {
+    publisher = "almalinux"
+    offer     = "almalinux-x86_64"
+    sku       = "9-gen2"
+    version   = "latest"
   }
 }
 
@@ -410,14 +417,10 @@ resource "azurerm_linux_virtual_machine" "private" {
     storage_account_type = "Standard_LRS"
   }
 
-  source_image_reference {
-
-    publisher = var.almalinux_publisher
-
-    offer = var.almalinux_offer
-
-    sku = var.almalinux_sku
-
-    version = var.almalinux_version
+      source_image_reference {
+    publisher = "almalinux"
+    offer     = "almalinux-x86_64"
+    sku       = "9-gen2"
+    version   = "latest"
   }
 }
