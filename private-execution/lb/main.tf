@@ -144,7 +144,7 @@ resource "azurerm_lb_rule" "frontend_http" {
 
   idle_timeout_in_minutes = 15
 
-  enable_tcp_reset = true
+  # enable_tcp_reset = true
 
   floating_ip_enabled = false
 
