@@ -320,9 +320,9 @@ resource "azurerm_network_interface" "private" {
 
     subnet_id = azurerm_subnet.private.id
 
-    private_ip_address_allocation = "Static"
+    private_ip_address_allocation = "Dynamic"
 
-    private_ip_address = azurerm_linux_virtual_machine.private[each.key].private_ip_address
+    # private_ip_address = azurerm_linux_virtual_machine.private[each.key].private_ip_address
 
     # IMPORTANT:
     #
@@ -399,7 +399,7 @@ resource "azurerm_linux_virtual_machine" "private" {
 
   location = azurerm_resource_group.main.location
 
-  size = var.vm_size
+  size = each.value
 
   admin_username = var.admin_username
 
