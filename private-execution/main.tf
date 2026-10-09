@@ -189,6 +189,89 @@ resource "azurerm_subnet_network_security_group_association" "bastion" {
 # PRIVATE VM NSG
 # ============================================================
 
+# resource "azurerm_network_security_group" "private" {
+#   name                = "roboshop-private-nsg"
+#   location            = azurerm_resource_group.main.location
+#   resource_group_name = azurerm_resource_group.main.name
+
+#   # ----------------------------------------------------------
+#   # SSH ONLY FROM BASTION SUBNET
+#   # ----------------------------------------------------------
+
+#   security_rule {
+#     name                       = "Allow-SSH-From-Bastion"
+#     priority                   = 100
+#     direction                  = "Inbound"
+#     access                     = "Allow"
+#     protocol                   = "Tcp"
+
+#     source_port_range      = "*"
+#     destination_port_range = "22"
+
+#     source_address_prefix      = "10.20.1.0/24"
+#     destination_address_prefix = "*"
+#   }
+
+#   # ----------------------------------------------------------
+#   # ALL TCP FROM VNET
+#   #
+#   # OPTIONAL LAB RULE
+#   #
+#   # This allows private VMs to communicate with each other
+#   # over TCP ports.
+#   # ----------------------------------------------------------
+
+#   security_rule {
+#     name                       = "Allow-All-TCP-From-VNet"
+#     priority                   = 200
+#     direction                  = "Inbound"
+#     access                     = "Allow"
+#     protocol                   = "Tcp"
+
+#     source_port_range      = "*"
+#     destination_port_range = "*"
+
+#     source_address_prefix      = "10.20.0.0/16"
+#     destination_address_prefix = "*"
+#   }
+
+#   # ----------------------------------------------------------
+#   # HTTP
+#   # ----------------------------------------------------------
+
+#   security_rule {
+#     name                       = "Allow-HTTP-From-VNet"
+#     priority                   = 210
+#     direction                  = "Inbound"
+#     access                     = "Allow"
+#     protocol                   = "Tcp"
+
+#     source_port_range      = "*"
+#     destination_port_range = "80"
+
+#     source_address_prefix      = "10.20.0.0/16"
+#     destination_address_prefix = "*"
+#   }
+
+#   # ----------------------------------------------------------
+#   # HTTPS
+#   # ----------------------------------------------------------
+
+#   security_rule {
+#     name                       = "Allow-HTTPS-From-VNet"
+#     priority                   = 220
+#     direction                  = "Inbound"
+#     access                     = "Allow"
+#     protocol                   = "Tcp"
+
+#     source_port_range      = "*"
+#     destination_port_range = "443"
+
+#     source_address_prefix      = "10.20.0.0/16"
+#     destination_address_prefix = "*"
+#   }
+# }
+
 resource "azurerm_network_security_group" "private" {
   name                = "roboshop-private-nsg"
   location            = azurerm_resource_group.main.location
@@ -213,12 +296,51 @@ resource "azurerm_network_security_group" "private" {
   }
 
   # ----------------------------------------------------------
+  # HTTP FROM INTERNET
+  #
+  # Internet
+  #    ↓
+  # Azure Load Balancer
+  #    ↓
+  # Frontend VM :80
+  # ----------------------------------------------------------
+
+  security_rule {
+    name                       = "Allow-HTTP-From-Internet"
+    priority                   = 110
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+
+    source_port_range      = "*"
+    destination_port_range = "80"
+
+    source_address_prefix      = "Internet"
+    destination_address_prefix = "*"
+  }
+
+  # ----------------------------------------------------------
+  # ALLOW AZURE LOAD BALANCER HEALTH PROBE
+  # ----------------------------------------------------------
+
+  security_rule {
+    name                       = "Allow-HTTP-From-AzureLoadBalancer"
+    priority                   = 120
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+
+    source_port_range      = "*"
+    destination_port_range = "80"
+
+    source_address_prefix      = "AzureLoadBalancer"
+    destination_address_prefix = "*"
+  }
+
+  # ----------------------------------------------------------
   # ALL TCP FROM VNET
   #
   # OPTIONAL LAB RULE
-  #
-  # This allows private VMs to communicate with each other
-  # over TCP ports.
   # ----------------------------------------------------------
 
   security_rule {
@@ -236,7 +358,7 @@ resource "azurerm_network_security_group" "private" {
   }
 
   # ----------------------------------------------------------
-  # HTTP
+  # HTTP FROM VNET
   # ----------------------------------------------------------
 
   security_rule {
@@ -254,15 +376,15 @@ resource "azurerm_network_security_group" "private" {
   }
 
   # ----------------------------------------------------------
-  # HTTPS
+  # HTTPS FROM VNET
   # ----------------------------------------------------------
 
   security_rule {
     name                       = "Allow-HTTPS-From-VNet"
-    priority                   = 220
-    direction                  = "Inbound"
-    access                     = "Allow"
-    protocol                   = "Tcp"
+    priority                  = 220
+    direction                 = "Inbound"
+    access                    = "Allow"
+    protocol                  = "Tcp"
 
     source_port_range      = "*"
     destination_port_range = "443"
