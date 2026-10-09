@@ -1,0 +1,39 @@
+- name: configuration
+  hosts: localhost
+  connection: local
+  become: true
+  tasks:
+    - name: inventory hosts
+      ansible.builtin.shell: ssh-keyscan -H {{ item }} >> ~/.ssh/known_hosts
+      loop:
+        - 10.20.2.4
+        - 10.20.2.5
+        - 10.20.2.6
+        - 10.20.2.7
+        - 10.20.2.8
+        - 10.20.2.9
+        - 10.20.2.10
+        - 10.20.2.11
+        - 10.20.2.12
+        - 10.20.2.13
+
+- name: Execute Ansible playbooks for each component
+  ansible.builtin.shell: >
+    ansible-playbook -i '{{ item.ip }},' main.yml
+    -e 'component={{ item.component }}'
+    -e 'env=dev'
+    --vault-password-file ~/vault-pass.txt
+    -e 'ansible_user=sandeep'
+    -e 'ansible_password=Sandeep.,@0088'
+  loop:
+    - { component: frontend,  ip: "10.20.2.4" }
+    - { component: mongodb,   ip: "10.20.2.5" }
+    - { component: catalogue, ip: "10.20.2.6" }
+    - { component: user,      ip: "10.20.2.7" }
+    - { component: redis,     ip: "10.20.2.8" }
+    - { component: cart,      ip: "10.20.2.9" }
+    - { component: mysql,     ip: "10.20.2.10" }
+    - { component: shipping,  ip: "10.20.2.11" }
+    - { component: rabbitmq,  ip: "10.20.2.12" }
+    - { component: payment,   ip: "10.20.2.13" }
+
