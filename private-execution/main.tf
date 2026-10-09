@@ -309,7 +309,7 @@ resource "azurerm_network_interface" "bastion" {
 
 resource "azurerm_network_interface" "private" {
 
-  for_each = var.private_vm_ips
+  for_each = var.private_vms
 
   name                = "roboshop-${each.key}-nic"
   location            = azurerm_resource_group.main.location
@@ -320,9 +320,9 @@ resource "azurerm_network_interface" "private" {
 
     subnet_id = azurerm_subnet.private.id
 
-    private_ip_address_allocation = "Dynamic"
+    private_ip_address_allocation = "Static"
 
-    # private_ip_address = azurerm_linux_virtual_machine.private[each.key].private_ip_address
+    private_ip_address = each.value.ip
 
     # IMPORTANT:
     #
@@ -389,7 +389,7 @@ resource "azurerm_linux_virtual_machine" "bastion" {
 
 resource "azurerm_linux_virtual_machine" "private" {
 
-  for_each = var.private_vm_ips
+  for_each = var.private_vms
 
   name = "roboshop-${each.key}"
 
@@ -399,7 +399,7 @@ resource "azurerm_linux_virtual_machine" "private" {
 
   location = azurerm_resource_group.main.location
 
-  size = each.value
+  size = each.value.size
 
   admin_username = var.admin_username
 
@@ -437,7 +437,7 @@ resource "azurerm_dns_a_record" "records" {
     azurerm_linux_virtual_machine.bastion
   ]
 
-  for_each = var.private_vm_ips
+  for_each = var.private_vms
 
   name = "${each.key}-dev"
   zone_name = data.azurerm_dns_zone.main.name
