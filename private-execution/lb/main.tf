@@ -157,18 +157,18 @@ resource "azurerm_lb_rule" "frontend_http" {
 # 9. OUTPUTS
 # ============================================================
 
-output "load_balancer_public_ip" {
-  value = azurerm_public_ip.lb.ip_address
-}
+# output "load_balancer_public_ip" {
+#   value = azurerm_public_ip.lb.ip_address
+# }
 
-output "frontend_url" {
-  value = "http://${azurerm_public_ip.lb.ip_address}"
-}
+# output "frontend_url" {
+#   value = "http://${azurerm_public_ip.lb.ip_address}"
+# }
 
-output "load_balancer_name" {
-  value = azurerm_lb.frontend.name
-}
+# output "load_balancer_name" {
+#   value = azurerm_lb.frontend.name
+# }
 
-output "backend_pool_name" {
-  value = azurerm_lb_backend_address_pool.frontend.name
-}
+# output "backend_pool_name" {
+#   value = azurerm_lb_backend_address_pool.frontend.name
+# }
