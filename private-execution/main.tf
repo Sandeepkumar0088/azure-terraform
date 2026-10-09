@@ -153,7 +153,7 @@ security_rule {
   source_port_range      = "*"
   destination_port_range = "22"
 
-  source_address_prefix      = "20.192.13.93/32"
+  source_address_prefix      = "20.198.97.131/32"
   destination_address_prefix = "*"
 }
 
