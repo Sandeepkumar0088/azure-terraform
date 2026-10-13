@@ -53,18 +53,28 @@
         state: present
         update_cache: true
 
+    # - name: Check PostgreSQL PGDG repository setup script
+    #   ansible.builtin.stat:
+    #     path: /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh
+    #     register: pgdg_script
+
+    # - name: Configure official PostgreSQL repository
+    #   ansible.builtin.command:
+    #     argv:
+    #     - /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh
+    #     - -y
+    #     when: not pgdg_script.stat.exists
     - name: Check PostgreSQL PGDG repository setup script
       ansible.builtin.stat:
         path: /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh
-        register: pgdg_script
+      register: pgdg_script
 
     - name: Configure official PostgreSQL repository
       ansible.builtin.command:
         argv:
-        - /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh
-        - -y
-        when: not pgdg_script.stat.exists
-
+          - /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh
+          - -y
+      when: pgdg_script.stat.exists
     - name: Update apt cache after repository configuration
       ansible.builtin.apt:
         update_cache: true
@@ -96,27 +106,44 @@
   # msg: "Upload {{ sql_file }} to the PostgreSQL server before running this playbook."
   # when: not sql_dump.stat.exists
 
-    - name: Set permissions for SQL dump file
-      ansible.builtin.file:
-        path: "{{ sql_file }}"
-        owner: ubuntu
-        group: ubuntu
-        mode: "0644"
+    # - name: Set permissions for SQL dump file
+    #   ansible.builtin.file:
+    #     path: "./"
+    #     owner: ubuntu
+    #     group: ubuntu
+    #     mode: "0644"
 
-    - name: Copy SQL dump to /tmp
-      ansible.builtin.copy:
-        src: "{{ sql_file }}"
-        dest: "{{ sql_temp_file }}"
-        remote_src: true
-        owner: postgres
-        group: postgres
-        mode: "0644"
+    # - name: Copy SQL dump to /tmp
+    #   ansible.builtin.copy:
+    #     src: "./public.sql"
+    #     dest: "/tmp/public.sql"
+    #     remote_src: true
+    #     owner: postgres
+    #     group: postgres
+    #     mode: "0644"
+
+    # - name: Set permissions for SQL dump file
+    #   ansible.builtin.file:
+    #     path: /home/ubuntu/public.sql
+    #     owner: ubuntu
+    #     group: ubuntu
+    #     mode: "0644"
+    #     state: file
+
+    # - name: Copy SQL dump to /tmp
+    #   ansible.builtin.copy:
+    #     src: /home/ubuntu/public.sql
+    #     dest: /tmp/public.sql
+    #     remote_src: true
+    #     owner: postgres
+    #     group: postgres
+    #     mode: "0644"
 
   # 7. Create database and user
 
     - name: Create PostgreSQL database
       community.postgresql.postgresql_db:
-        name: "postgreiot"
+        name: "postgresiot"
         state: present
         login_user: postgres
         maintenance_db: postgres
@@ -138,7 +165,7 @@
         type: database
         privs: ALL
         roles: "doadmin"
-        objs: "postgreiot"
+        objs: "postgresiot"
         state: present
         login_user: postgres
         become_user: postgres
