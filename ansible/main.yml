@@ -1,0 +1,197 @@
+- name: Configure Ubuntu PostgreSQL 17 server
+  hosts: localhost
+  connection: local
+  become: true
+  tasks:
+    - name: Update apt package cache
+      ansible.builtin.apt:
+        update_cache: true
+        cache_valid_time: 3600
+    - name: Upgrade installed packages
+      ansible.builtin.apt:
+        upgrade: dist
+  # Install required packages
+    - name: Install required utilities and nginx
+      ansible.builtin.apt:
+        name:
+        - curl
+        - git
+        - wget
+        - unzip
+        - vim
+        - nginx
+        - ca-certificates
+        state: present  
+
+    # - name: Enable and start nginx
+    #   ansible.builtin.service:
+    #   name: nginx
+    #   state: started
+    #   enabled: true
+  # Install Docker using the official installation script
+  #   - name: Download Docker installation script
+  #     ansible.builtin.get_url:
+  #       url: https://get.docker.com
+  #       # dest: /tmp/get-docker.sh
+  #       mode: "0755"
+  #   - name: Enable and start Docker
+  #     ansible.builtin.service:
+  #       name: docker
+  #       state: started
+  #       enabled: true
+
+  #   - name: Add ubuntu user to Docker group
+  #     ansible.builtin.user:
+  #       name: ubuntu
+  #       groups: docker
+  #       append: true
+
+  # Install PostgreSQL APT repository prerequisites
+    - name: Install PostgreSQL common packages
+      ansible.builtin.apt:
+        name: postgresql-common
+        state: present
+        update_cache: true
+
+    - name: Check PostgreSQL PGDG repository setup script
+      ansible.builtin.stat:
+        path: /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh
+        register: pgdg_script
+
+    - name: Configure official PostgreSQL repository
+      ansible.builtin.command:
+        argv:
+        - /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh
+        - -y
+        when: not pgdg_script.stat.exists
+
+    - name: Update apt cache after repository configuration
+      ansible.builtin.apt:
+        update_cache: true
+  # Install PostgreSQL 17 and Python database dependencies
+
+    - name: Install PostgreSQL 17 and dependencies
+      ansible.builtin.apt:
+        name:
+        - postgresql-17
+        - postgresql-client-17
+        - python3-psycopg2
+        state: present
+
+    - name: Enable and start PostgreSQL
+      ansible.builtin.service:
+        name: postgresql
+        state: started
+        enabled: true
+
+  # Verify the uploaded SQL file exists
+
+  # 7. Check SQL dump on the Ubuntu home directory
+  # ansible.builtin.stat:
+  # path: "{{ sql_file }}"
+  # register: sql_dump
+
+  # # 7. Stop if the SQL dump is missing
+  # ansible.builtin.fail:
+  # msg: "Upload {{ sql_file }} to the PostgreSQL server before running this playbook."
+  # when: not sql_dump.stat.exists
+
+    - name: Set permissions for SQL dump file
+      ansible.builtin.file:
+        path: "{{ sql_file }}"
+        owner: ubuntu
+        group: ubuntu
+        mode: "0644"
+
+    - name: Copy SQL dump to /tmp
+      ansible.builtin.copy:
+        src: "{{ sql_file }}"
+        dest: "{{ sql_temp_file }}"
+        remote_src: true
+        owner: postgres
+        group: postgres
+        mode: "0644"
+
+  # 7. Create database and user
+
+    - name: Create PostgreSQL database
+      community.postgresql.postgresql_db:
+        name: "postgreiot"
+        state: present
+        login_user: postgres
+        maintenance_db: postgres
+        become_user: postgres
+
+    - name: Create PostgreSQL application user
+      community.postgresql.postgresql_user:
+        name: "doadmin"
+        password: "Doadmin@123"
+        role_attr_flags: LOGIN
+        state: present
+        login_user: postgres
+        become_user: postgres
+        no_log: true
+
+    - name: Grant database privileges to application user
+      community.postgresql.postgresql_privs:
+        database: postgresiot
+        type: database
+        privs: ALL
+        roles: "doadmin"
+        objs: "postgreiot"
+        state: present
+        login_user: postgres
+        become_user: postgres
+
+  # 8. Restore SQL dump only once
+
+  # name: Check whether database restore was completed
+  # ansible.builtin.stat:
+  # path: "{{ restore_marker }}"
+  # register: restore_status
+
+  # name: Restore PostgreSQL database
+  # ansible.builtin.command:
+  # argv:
+  # - psql
+  # - -v
+  # - ON_ERROR_STOP=1
+  # - -d
+  # - "{{ db_name }}"
+  # - -f
+  # - "{{ sql_temp_file }}"
+  # become_user: postgres
+  # when: not restore_status.stat.exists
+
+  # name: Create restore completion marker
+  # ansible.builtin.file:
+  # path: "{{ restore_marker }}"
+  # state: touch
+  # owner: postgres
+  # group: postgres
+  # mode: "0600"
+  # when: not restore_status.stat.exists
+
+  # # 9. Verify PostgreSQL installation
+
+    - name: Check PostgreSQL version
+      ansible.builtin.command: psql --version
+      register: psql_version
+      changed_when: false
+
+    - name: Display PostgreSQL version
+      ansible.builtin.debug:
+        var: psql_version.stdout
+
+    - name: Verify database exists
+      community.postgresql.postgresql_info:
+        filter:
+        - databases
+        login_user: postgres
+        become_user: postgres
+        register: postgres_info
+
+    - name: Display database verification
+      ansible.builtin.debug:
+        msg: "PostgreSQL database {{ db_name }} has been configured."
+        when: db_name in postgres_info.databases
