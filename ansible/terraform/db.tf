@@ -3,7 +3,7 @@ resource "azurerm_linux_virtual_machine" "test_postgresql_vm" {
   computer_name       = "ubuntu"
   resource_group_name = data.azurerm_resource_group.existing.name
   location            = data.azurerm_resource_group.existing.location
-  size                = "Standard_D4ls_v6"
+  size                = "Standard_D2ls_v6"
   admin_username                  = "ubuntu"
   admin_password                  = var.admin_password
   disable_password_authentication = false
