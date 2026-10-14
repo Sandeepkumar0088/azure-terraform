@@ -140,7 +140,7 @@ resource "null_resource" "run_ansible" {
       "sudo apt-get update",
       "sudo apt-get install -y ansible",
       "cd /home/ubuntu",
-      "ansible-playbook ansible.yml"
+      "ansible-playbook main.yml"
     ]
   }
 }
