@@ -56,7 +56,7 @@ resource "azurerm_network_security_group" "private_vm" {
     protocol                   = "Tcp"
     source_port_range          = "*"
     destination_port_range     = "22"
-    source_address_prefix      = var.bastion_private_ip
+    source_address_prefix      = "20.219.134.36/32"
     destination_address_prefix = "*"
   }
 

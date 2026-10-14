@@ -7,7 +7,7 @@ variable "resource_group_name" {
 variable "bastion_private_ip" {
   description = "Private IP address of the bastion VM"
   type        = string
-  default     = ""
+  default     = "10.1.1.4"
 }
 
 variable "admin_username" {
