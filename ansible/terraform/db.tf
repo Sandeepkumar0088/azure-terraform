@@ -140,11 +140,17 @@ resource "null_resource" "run_ansible" {
   }
 
 
+  # Copy SQL dump from work VM to PostgreSQL VM
+  provisioner "file" {
+    source      = "/home/ubuntu/public-202610131535.sql"
+    destination = "/home/ubuntu/public-202610131535.sql"
+  }
+
   provisioner "remote-exec" {
     inline = [
       "sudo apt-get update",
       "sudo apt-get install -y ansible",
-      "cd /home/ubuntu",
+      "sudo chmod 644 /home/ubuntu/public-202610131535.sql",
       "ansible-playbook /home/ubuntu/main.yml"
     ]
   }
