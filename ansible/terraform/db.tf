@@ -134,13 +134,18 @@ resource "null_resource" "run_ansible" {
     password = "Sandeep.,@0088"
     timeout  = "5m"
   }
+  provisioner "file" {
+    source      = "${path.module}/main.yml"
+    destination = "/home/ubuntu/main.yml"
+  }
+
 
   provisioner "remote-exec" {
     inline = [
       "sudo apt-get update",
       "sudo apt-get install -y ansible",
       "cd /home/ubuntu",
-      "ansible-playbook main.yml"
+      "ansible-playbook /home/ubuntu/main.yml"
     ]
   }
 }
