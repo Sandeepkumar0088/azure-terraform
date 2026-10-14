@@ -119,5 +119,5 @@ resource "azurerm_linux_virtual_machine" "postgres" {
     version   = "latest"
   }
 
-  disk_controller_type = "SCSI"
+  disk_controller_type = "NVMe"
 }
