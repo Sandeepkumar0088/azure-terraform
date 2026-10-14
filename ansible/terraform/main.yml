@@ -123,7 +123,7 @@
         fi
       args:
         executable: /bin/bash
-      no_log: true
+      # no_log: true
 
     # - name: Set PostgreSQL application user password
     #   become: true
@@ -156,7 +156,7 @@
           - psql
           - -c
           - "ALTER ROLE doadmin WITH LOGIN PASSWORD '{{ postgresql_password }}';"
-      no_log: true
+      # no_log: true
 
     - name: Grant all database privileges to application user
       become: true
