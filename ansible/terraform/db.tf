@@ -1,12 +1,43 @@
+# resource "azurerm_linux_virtual_machine" "test_postgresql_vm" {
+#   name                = "ubuntu"
+#   computer_name       = "ubuntu"
+#   resource_group_name = data.azurerm_resource_group.existing.name
+#   location            = data.azurerm_resource_group.existing.location
+#   size                = "Standard_B2ats_v2"
+#   admin_username                  = "ubuntu"
+#   admin_password                  = var.admin_password
+#   disable_password_authentication = false
+
+#   network_interface_ids = [
+#     azurerm_network_interface.private_vm.id
+#   ]
+
+#   os_disk {
+#     name                 = "ubuntu-private-os-disk"
+#     caching              = "ReadWrite"
+#     storage_account_type = "Standard_LRS"
+#   }
+
+#   source_image_reference {
+#     publisher = "Canonical"
+#     offer     = "0001-com-ubuntu-server-jammy"
+#     sku       = "22_04-lts-gen2"
+#     version   = "latest"
+#   }
+# }
+
 resource "azurerm_linux_virtual_machine" "test_postgresql_vm" {
   name                = "ubuntu"
   computer_name       = "ubuntu"
   resource_group_name = data.azurerm_resource_group.existing.name
   location            = data.azurerm_resource_group.existing.location
-  size                = "Standard_B2ls_v2"
+  size                = "Standard_B2ats_v2"
+
   admin_username                  = "ubuntu"
   admin_password                  = var.admin_password
   disable_password_authentication = false
+
+  disk_controller_type = "SCSI"
 
   network_interface_ids = [
     azurerm_network_interface.private_vm.id
