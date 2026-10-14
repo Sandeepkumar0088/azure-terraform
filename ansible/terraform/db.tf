@@ -121,3 +121,26 @@ resource "azurerm_linux_virtual_machine" "postgres" {
 
   disk_controller_type = "NVMe"
 }
+
+resource "null_resource" "run_ansible" {
+  depends_on = [
+    azurerm_linux_virtual_machine.postgres
+  ]
+
+  connection {
+    type     = "ssh"
+    host     = azurerm_linux_virtual_machine.postgres.private_ip_address
+    user     = "ubuntu"
+    password = "Sandeep.,@0088"
+    timeout  = "5m"
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "sudo apt-get update",
+      "sudo apt-get install -y ansible",
+      "cd /home/ubuntu",
+      "ansible-playbook ansible.yml"
+    ]
+  }
+}
