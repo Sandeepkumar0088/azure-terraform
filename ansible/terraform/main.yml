@@ -117,9 +117,9 @@
       become: true
       ansible.builtin.shell: |
         if sudo -u postgres psql -tAc "SELECT 1 FROM pg_roles WHERE rolname = 'doadmin'" | grep -q 1; then
-          sudo -u postgres psql -c "ALTER ROLE doadmin WITH LOGIN PASSWORD '{{ postgresql_password }}';"
+          sudo -u postgres psql -c "ALTER ROLE doadmin WITH LOGIN PASSWORD 'Sandeep.,@0088';"
         else
-          sudo -u postgres psql -c "CREATE ROLE doadmin WITH LOGIN PASSWORD '{{ postgresql_password }}';"
+          sudo -u postgres psql -c "CREATE ROLE doadmin WITH LOGIN PASSWORD 'Sandeep.,@0088';"
         fi
       args:
         executable: /bin/bash
@@ -155,7 +155,7 @@
           - postgres
           - psql
           - -c
-          - "ALTER ROLE doadmin WITH LOGIN PASSWORD '{{ postgresql_password }}';"
+          - "ALTER ROLE doadmin WITH LOGIN PASSWORD 'Sandeep.,@0088';"
       # no_log: true
 
     - name: Grant all database privileges to application user
