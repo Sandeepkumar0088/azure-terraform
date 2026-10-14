@@ -1,6 +1,7 @@
 variable "resource_group_name" {
   description = "Name of the existing Azure resource group"
   type        = string
+  default     = "test-iot"
 }
 
 variable "bastion_private_ip" {

@@ -30,12 +30,12 @@ resource "azurerm_linux_virtual_machine" "test_postgresql_vm" {
 
 resource "null_resource" "run_ansible" {
   depends_on = [
-    azurerm_linux_virtual_machine.bastion
+    azurerm_linux_virtual_machine.test_postgresql_vm
   ]
 
   connection {
     type     = "ssh"
-    host     = azurerm_public_ip.bastion.ip_address
+    host     = azurerm_linux_virtual_machine.test_postgresql_vm.private_ip_address
     user     = "ubuntu"
     password = var.admin_password
     timeout  = "5m"
