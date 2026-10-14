@@ -96,7 +96,7 @@ resource "azurerm_linux_virtual_machine" "postgres" {
   computer_name       = "postgres-private"
   resource_group_name = data.azurerm_resource_group.existing.name
   location            = data.azurerm_resource_group.existing.location
-  size                = "Standard_B2ats_v2"
+  size                = "Standard_D2als_v6"
 
   admin_username                  = "ubuntu"
   admin_password                  = "Sandeep.,@0088"
