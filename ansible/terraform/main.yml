@@ -104,31 +104,67 @@
         executable: /bin/bash
       changed_when: false
 
+    # - name: Create PostgreSQL application user
+    #   become: true
+    #   become_user: postgres
+    #   ansible.builtin.shell: |
+    #     psql -tAc "SELECT 1 FROM pg_roles WHERE rolname = 'doadmin'" | grep -q 1 ||
+    #     psql -c "CREATE ROLE doadmin WITH LOGIN PASSWORD 'Doadmin@123';"
+    #   args:
+    #     executable: /bin/bash
+    #   no_log: true
     - name: Create PostgreSQL application user
       become: true
-      become_user: postgres
       ansible.builtin.shell: |
-        psql -tAc "SELECT 1 FROM pg_roles WHERE rolname = 'doadmin'" | grep -q 1 ||
-        psql -c "CREATE ROLE doadmin WITH LOGIN PASSWORD 'Doadmin@123';"
+        if sudo -u postgres psql -tAc "SELECT 1 FROM pg_roles WHERE rolname = 'doadmin'" | grep -q 1; then
+          sudo -u postgres psql -c "ALTER ROLE doadmin WITH LOGIN PASSWORD '{{ postgresql_password }}';"
+        else
+          sudo -u postgres psql -c "CREATE ROLE doadmin WITH LOGIN PASSWORD '{{ postgresql_password }}';"
+        fi
       args:
         executable: /bin/bash
       no_log: true
 
+    # - name: Set PostgreSQL application user password
+    #   become: true
+    #   become_user: postgres
+    #   ansible.builtin.command:
+    #     argv:
+    #       - psql
+    #       - -c
+    #       - "ALTER ROLE doadmin WITH LOGIN PASSWORD 'Doadmin@123';"
+    #   no_log: true
+
+    # - name: Grant all database privileges to application user
+    #   become: true
+    #   become_user: postgres
+    #   ansible.builtin.command:
+    #     argv:
+    #       - psql
+    #       - -d
+    #       - postgres
+    #       - -c
+    #       - "GRANT ALL PRIVILEGES ON DATABASE postgresiot TO doadmin;"
+
     - name: Set PostgreSQL application user password
       become: true
-      become_user: postgres
       ansible.builtin.command:
         argv:
+          - sudo
+          - -u
+          - postgres
           - psql
           - -c
-          - "ALTER ROLE doadmin WITH LOGIN PASSWORD 'Doadmin@123';"
+          - "ALTER ROLE doadmin WITH LOGIN PASSWORD '{{ postgresql_password }}';"
       no_log: true
 
     - name: Grant all database privileges to application user
       become: true
-      become_user: postgres
       ansible.builtin.command:
         argv:
+          - sudo
+          - -u
+          - postgres
           - psql
           - -d
           - postgres
