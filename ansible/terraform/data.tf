@@ -1,7 +1,6 @@
 # Existing resource group
 data "azurerm_resource_group" "existing" {
   name = "test-iot"
-  location = "Central India"
 }
 
 # Existing VNet: test-iot-vm-vnet (10.1.0.0/16)
